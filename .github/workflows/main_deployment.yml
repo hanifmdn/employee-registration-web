@@ -1,0 +1,61 @@
+name: CI/CD Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: app
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      # Checkout source code repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Authenticate GitHub Actions to Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.CLOUD_PROVIDER_CREDENTIALS }}
+
+      # Setup Google Cloud SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Configure Docker authentication for Artifact Registry
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker asia-southeast2-docker.pkg.dev --quiet
+
+      # Build Docker image
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t ${{ secrets.CONTAINER_REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+
+      # Push Docker image to Artifact Registry
+      - name: Push Docker Image
+        run: |
+          docker push \
+            ${{ secrets.CONTAINER_REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      # Deploy application to Cloud Run
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          service: ${{ secrets.SERVICE_NAME }}
+          region: ${{ secrets.GCP_REGION }}
+          image: ${{ secrets.CONTAINER_REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      # Display deployed service URL
+      - name: Show Service URL
+        run: echo "${{ steps.deploy.outputs.url }}"
