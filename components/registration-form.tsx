@@ -178,7 +178,7 @@ export function RegistrationForm() {
       <div className="mx-auto w-full max-w-3xl rounded-2xl border border-white/70 bg-white/85 p-5 shadow-[0_12px_40px_-18px_rgba(15,23,42,0.35)] backdrop-blur sm:p-8">
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Portal Pendaftaran</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Portal Pendaftaran - Praktikum Modul 6</p>
             <h1 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">Form Pendaftaran Pegawai</h1>
             <p className="mt-2 text-sm text-slate-600">Lengkapi data berikut dan unggah gambar serta CV sebelum mengirim form.</p>
           </div>

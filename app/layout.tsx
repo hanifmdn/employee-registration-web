@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portal Pendaftaran Pegawai",
+  title: "Portal Pendaftaran Pegawai - Praktikum Modul 6",
   description: "Form pendaftaran pegawai dengan upload gambar",
 };
 
